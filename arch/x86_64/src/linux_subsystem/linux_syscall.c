@@ -39,6 +39,7 @@
 
 #include "tux.h"
 #include "tux_syscall_table.h"
+#include "syscall_filter.h"
 
 /****************************************************************************
  * Private Data
@@ -732,7 +733,12 @@ linux_interface(unsigned long nbr, uintptr_t parm1, uintptr_t parm2,
   uint64_t ret;
 
   svcinfo("Linux Subsystem call: %d\n", nbr);
-
+  
+	int flag = check_syscall(nbr, parm1, parm2, parm3, parm4, parm5, parm6);
+	if (flag != VALID) {
+		svcinfo("Bad system call: %d, the process has been killed\n", nbr);
+		tux_exit(231, 1, 0, 0, 0, 0, 0);
+	}
   /* Call syscall from table. */
   ret = linux_syscall_action_table[nbr](nbr, parm1, parm2, parm3, parm4, parm5, parm6);
 
