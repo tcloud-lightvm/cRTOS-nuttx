@@ -6,12 +6,6 @@
  */
 #include "syscall_white_list.h"
 
-// syscall is valid or not
-enum syscall_status {
-  INVALID = -1,
-  VALID = 0,
-};
-
 
 int check_syscall(unsigned long nbr, uintptr_t parm1, uintptr_t parm2,
                           uintptr_t parm3, uintptr_t parm4, uintptr_t parm5,
@@ -49,19 +43,25 @@ int check_syscall(unsigned long nbr, uintptr_t parm1, uintptr_t parm2,
           {
           case EQ: {
             if (params[param_ptr] != restriction.val) {
-              return INVALID;
+              return -1;
+            }
+            break;
+          }
+          case NEQ: {
+            if (params[param_ptr] == restriction.val) {
+              return -1;
             }
             break;
           }
           case LESS_THAN: {
             if (params[param_ptr] >= restriction.val) {
-              return INVALID;
+              return -1;
             }
             break;
           }
           case MORE_THAN: {
             if (params[param_ptr] <= restriction.val) {
-              return INVALID;
+              return -1;
             }
             break;
           } 
@@ -73,5 +73,5 @@ int check_syscall(unsigned long nbr, uintptr_t parm1, uintptr_t parm2,
     }
   }
 
-  return VALID;
+  return 0;
 }

@@ -1,10 +1,3 @@
-
-#define SYS_read	 0
-#define SYS_write	 1
-#define SYS_open   2
-#define SYS_close  3
-
-
 typedef unsigned long int	uintptr_t;
 
 // syscall filter operations
@@ -12,6 +5,7 @@ enum syscall_param_filter_op {
   PASS,
   FAIL,
   EQ,
+  NEQ,
   LESS_THAN,
   MORE_THAN,
 };
@@ -40,80 +34,18 @@ struct syscall_filter_nbr
 
 struct syscall_filter_nbr white_list[] = {
   {
-    .nbr = SYS_read,
-    .param_num = 2,
+    .nbr = 231,
+    .param_num = 1,
     .filter = {
        {
-        .tocheck = 2,
+        .tocheck = 1,
         .restrictions = {
           {
-            .op = LESS_THAN,
-            .val = 2
-          },
-          {
-            .op = MORE_THAN,
-            .val = 0
+            .op = NEQ,
+            .val = 521
           },
         }
       },
-			{
-        .tocheck = 2,
-        .restrictions = {
-          {
-            .op = LESS_THAN,
-            .val = 5
-          },
-          {
-            .op = MORE_THAN,
-            .val = 3
-          },
-        }
-      },
-    }
-  },
-  {
-    .nbr = SYS_write,
-    .param_num = 1,
-    .filter = {
-      {
-        .tocheck = 1,
-        .restrictions = {
-          {
-            .op = EQ,
-            .val = 2
-          }
-        }
-      }
-    }
-  },
-  {
-    .nbr = SYS_open,
-    .param_num = 1,
-    .filter = {
-      {
-        .tocheck = 1,
-        .restrictions = {
-          {
-            .op = EQ,
-            .val = 2
-          }
-        }
-      }
-    }
-  },
-  {
-    .nbr = SYS_close,
-    .param_num = 1,
-    .filter = {
-      {
-        .tocheck = 1,
-        .restrictions = {
-          {
-            .op = EQ,
-            .val = 2
-          }
-        }
-      }
     }
   },
 };
